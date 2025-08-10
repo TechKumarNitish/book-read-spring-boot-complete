@@ -42,9 +42,11 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(new AntPathRequestMatcher("/auth/**")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll()
-                .requestMatchers(new AntPathRequestMatcher("/books/**")).hasRole("ROLE_ADMIN")
+                .requestMatchers(new AntPathRequestMatcher("/books/**")).hasRole("ADMIN")
+                .requestMatchers(new AntPathRequestMatcher("/authors/**")).hasRole("ROLE_USER")
                 .anyRequest().authenticated()
             )
+            .headers(headers -> headers.frameOptions().disable())
             .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 

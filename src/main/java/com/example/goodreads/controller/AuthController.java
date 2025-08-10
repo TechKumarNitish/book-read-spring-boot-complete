@@ -4,7 +4,7 @@ import com.example.goodreads.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,10 +40,16 @@ public class AuthController {
 
     @PostMapping("/login")
     public Map<String, String> login(@RequestBody User user) {
+
         authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
         );
-        String token = jwtUtil.generateToken(user.getUsername());
+
+        User dbUser = userRepository.findByUsername(user.getUsername())
+                   .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        System.out.println("User found: " + dbUser.getUsername());
+        System.out.println(" with role: " + dbUser.getRole());
+        String token = jwtUtil.generateToken(user.getUsername(), dbUser.getRole());
         return Collections.singletonMap("jwt", token);
     }
 }
