@@ -1,8 +1,7 @@
 # Goodreads Clone – Spring Boot REST API
 
 A simple **Spring Boot**-based REST API for managing books, authors, and publishers, inspired by Goodreads.
-Implements full CRUD operations with proper relational mappings using **Spring Data JPA** and **Hibernate**.
-
+Implements full CRUD operations with proper relational mappings using **Spring Data JPA** and **Hibernate**.Also robust JWT-based authentication & authorization.
 ---
 
 ## Features
@@ -36,20 +35,37 @@ Implements full CRUD operations with proper relational mappings using **Spring D
 ```
 src/main/java/com/example/goodreads/
 │
+├── controller/
+│   ├── AuthorController.java
+│   ├── BookController.java
+│   ├── PublisherController.java
+│   └── AuthController.java               # Register/Login endpoints issuing JWT tokens
+│
 ├── model/
 │   ├── Author.java
 │   ├── Book.java
-│   └── Publisher.java
+│   ├── Publisher.java
+│   └── User.java                        # User entity for authentication
 │
 ├── repository/
 │   ├── AuthorRepository.java / AuthorJpaRepository.java
 │   ├── BookRepository.java / BookJpaRepository.java
 │   ├── PublisherRepository.java / PublisherJpaRepository.java
+│   └── UserRepository.java              # JPA repository for User
 │
 ├── service/
 │   ├── AuthorJpaService.java
 │   ├── BookJpaService.java
-│   └── PublisherJpaService.java
+│   ├── PublisherJpaService.java
+│   └── UserService.java (optional)      # User management & authentication logic
+│
+├── security/
+│   ├── JwtFilter.java                   # Filters requests, validates JWT
+│   ├── JwtUtils.java                    # Generates and validates JWT tokens
+│   └── SecurityConfig.java              # Spring Security config and filter chain
+│
+└── Application.java                     # Main Spring Boot starter class
+
 ```
 
 ---
